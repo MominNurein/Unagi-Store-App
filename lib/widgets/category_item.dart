@@ -1,4 +1,8 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
+
+import '../utills/chacher.dart';
 
 class CategoryItem extends StatelessWidget {
   final String categoryName;
@@ -11,27 +15,28 @@ class CategoryItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 10.0),
+      padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 6),
       child: Column(
         children: [
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 0),
-            height: 70,
+          SizedBox(
             width: 70,
-            decoration: BoxDecoration(
-                // border: Border.all(width: 2, color: Colors.grey),
-                borderRadius: BorderRadius.circular(100),
-                image: DecorationImage(
-                  image: NetworkImage(categoryImage),
-                  fit: BoxFit.fill,
-                )),
+            height: 70,
+            child: CachedNetworkImage(
+              cacheManager: Cacher.customCacheManager,
+              imageUrl: categoryImage,
+              placeholder: (context, url) => SpinKitWave(
+                color: Theme.of(context).primaryColor.withOpacity(0.7),
+                size: 20.0,
+              ),
+              errorWidget: (context, url, error) => const Icon(Icons.error),
+            ),
           ),
           const SizedBox(
             height: 10,
           ),
           Text(
             categoryName,
-            style: const TextStyle(fontSize: 14),
+            style: const TextStyle(fontSize: 12),
           )
         ],
       ),

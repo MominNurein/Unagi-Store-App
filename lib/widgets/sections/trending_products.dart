@@ -11,20 +11,13 @@ class TrendingProducts extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
-      itemCount: 5,
+      itemCount: 6,
       scrollDirection: Axis.horizontal,
       shrinkWrap: true,
       physics: const ClampingScrollPhysics(),
       itemBuilder: (context, index) => Padding(
         padding: const EdgeInsets.symmetric(horizontal: 8.0),
-        child: ProductCard(
-            id: products[index].id!,
-            name: products[index].name!,
-            price: products[index].price!,
-            image: products[index].thumbnail!,
-            condition: products[index].condition!,
-            dicsountPercentage: products[index].discountPercentage!.toInt(),
-            rating: products[index].rating!),
+        child: ProductCard(product: products[index]),
       ),
     );
   }

@@ -14,7 +14,7 @@ class CategoriesSlider extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 15.0),
+      padding: const EdgeInsets.symmetric(horizontal: 0.0, vertical: 15.0),
       child: categories.isEmpty
           ? Container(
               color: Colors.red,

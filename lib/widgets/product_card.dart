@@ -1,47 +1,16 @@
 // import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:unagi_app/models/product.dart';
+import 'package:unagi_app/utills/chacher.dart';
 import 'package:unagi_app/utills/formatter.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 // import 'package:flutter_svg/flutter_svg.dart';
 class ProductCard extends StatelessWidget {
-  final int id;
-  final String name;
-  final double price;
-  final String image;
-  final String condition;
-  final int dicsountPercentage;
-  final int rating;
+  final Product product;
 
-  const ProductCard(
-      {required this.id,
-      required this.name,
-      required this.price,
-      required this.image,
-      required this.condition,
-      required this.dicsountPercentage,
-      required this.rating,
-      Key? key})
-      : super(key: key);
-
-  // void viewProductDetails(String productId, BuildContext context) {
-  //   List<Product> product = context
-  //       .read<ProductsProvider>()
-  //       .getProducts
-  //       .where((product) => product.id == productId)
-  //       .toList();
-
-  //   Map<String, dynamic> productData = {
-  //     "id": product[0].id,
-  //     "title": product[0].name,
-  //     "description": product[0].description,
-  //     "price": product[0].price,
-  //     "category": product[0].category,
-  //     "imagePath": product[0].image,
-  //     "isFavourite": product[0].isFavourite,
-  //   };
-
-  //   Navigator.of(context).pushNamed("/product-details", arguments: productData);
-  // }
+  const ProductCard({required this.product, Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -52,8 +21,10 @@ class ProductCard extends StatelessWidget {
           border: Border.all(color: Colors.black.withOpacity(0.2), width: 0.5)),
       child: FittedBox(
         child: InkWell(
+          splashColor: Theme.of(context).primaryColor.withOpacity(0.20),
+          highlightColor: Colors.white.withOpacity(0.7),
           onTap: () {
-            debugPrint("$id");
+            debugPrint("${product.id}");
           },
           child: Container(
             decoration: BoxDecoration(borderRadius: BorderRadius.circular(20)),
@@ -67,29 +38,41 @@ class ProductCard extends StatelessWidget {
                         padding: const EdgeInsets.all(10),
                         width: double.infinity,
                         height: MediaQuery.of(context).size.height * 0.25,
-                        child: Image.network(image),
+                        child: CachedNetworkImage(
+                          cacheManager: Cacher.customCacheManager,
+                          imageUrl: product.thumbnail!,
+                          placeholder: (context, url) => SpinKitWave(
+                            color:
+                                Theme.of(context).primaryColor.withOpacity(0.7),
+                            size: 40.0,
+                          ),
+                          errorWidget: (context, url, error) =>
+                              const Icon(Icons.error),
+                        ),
                       ),
                       Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 10.0, vertical: 10.0),
                         width: double.infinity,
                         color: Colors.white10,
                         child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                name,
+                                product.name!,
                                 style: const TextStyle(fontSize: 18),
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis,
                               ),
                               Text(
-                                '\$${Formatter.currecyFormat(price)}',
+                                '\$${Formatter.currecyFormat(product.price!)}',
                                 style: TextStyle(
                                     fontWeight: FontWeight.bold,
                                     color: Colors.black.withOpacity(0.7),
                                     fontSize: 18),
                               ),
                               Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
+                                mainAxisAlignment: MainAxisAlignment.start,
                                 children: const [
                                   Icon(Icons.star, color: Colors.yellow),
                                   Icon(Icons.star, color: Colors.yellow),

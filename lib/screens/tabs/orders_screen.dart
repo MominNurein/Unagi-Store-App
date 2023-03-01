@@ -12,7 +12,7 @@ class OrdersScreen extends StatefulWidget {
 class _OrdersScreenState extends State<OrdersScreen> {
   String data = "";
 
-  void fetchData() async {
+  Future<void> fetchData() async {
     String url = "https://jsonplaceholder.typicode.com/posts";
     final response = await http.get(Uri.parse(url));
 
@@ -35,10 +35,19 @@ class _OrdersScreenState extends State<OrdersScreen> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-          body: Container(
-        child: data != ""
-            ? Text(data)
-            : const Center(child: CircularProgressIndicator()),
+          body: RefreshIndicator(
+        onRefresh: (() async => fetchData()),
+        child: ListView(
+          children: [
+            Center(
+              child: Container(
+                child: data != ""
+                    ? Text(data)
+                    : const Center(child: CircularProgressIndicator()),
+              ),
+            ),
+          ],
+        ),
       )),
     );
   }
